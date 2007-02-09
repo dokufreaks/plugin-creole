@@ -19,7 +19,7 @@ class action_plugin_creole extends DokuWiki_Action_Plugin {
     return array(
       'author' => 'Esther Brunner',
       'email'  => 'wikidesign@gmail.com',
-      'date'   => '2007-01-26',
+      'date'   => '2007-02-09',
       'name'   => 'Creole Plugin',
       'desc'   => 'Changes the editor toolbar if markup precedence is set to Creole',
       'url'    => 'http://www.wikidesign.ch/en/plugin/creole/start',
@@ -52,7 +52,7 @@ class action_plugin_creole extends DokuWiki_Action_Plugin {
         
         // headers
         if (preg_match("/h(\d)\.png/", $event->data[$i]['icon'], $match)){
-          $markup = substr('======', 0, $match[1] + 1);
+          $markup = substr('======', 0, $match[1]);
           $event->data[$i]['open']  = $markup." ";
           $event->data[$i]['close'] = " ".$markup."\\n";
           

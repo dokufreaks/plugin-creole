@@ -22,7 +22,7 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
     return array(
       'author' => 'Esther Brunner',
       'email'  => 'wikidesign@gmail.com',
-      'date'   => '2006-10-02',
+      'date'   => '2007-02-09',
       'name'   => 'Creole Plugin, header component',
       'desc'   => 'Creole style headers',
       'url'    => 'http://wiki.splitbrain.org/plugin:creole',
@@ -39,7 +39,7 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
   
   function preConnect(){
     $this->Lexer->addSpecialPattern(
-      '[ \t]*={2,}[^\n]+=*[ \t]*(?=\n)',
+      '(?m)^[ \t]*=+[^\n]+=*[ \t]*$',
       'base',
       'plugin_creole_header'
     );
@@ -54,7 +54,7 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
       && ($title{strlen($title) - 1} == '=')){ // DokuWiki
       $level = 7 - strspn($title, '=');
     } else {                                   // Creole
-      $level = strspn($title, '=') - 1;
+      $level = strspn($title, '=');
     }
     if ($level < 1) $level = 1;
     elseif ($level > 5) $level = 5;
