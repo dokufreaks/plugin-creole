@@ -20,9 +20,9 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
  
   function getInfo(){
     return array(
-      'author' => 'Esther Brunner',
-      'email'  => 'wikidesign@gmail.com',
-      'date'   => '2007-02-09',
+      'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
+      'email'  => 'dokuwiki@chimeric.de',
+      'date'   => '2008-02-12',
       'name'   => 'Creole Plugin, header component',
       'desc'   => 'Creole style headers',
       'url'    => 'http://wiki.splitbrain.org/plugin:creole',

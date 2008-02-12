@@ -20,9 +20,9 @@ class syntax_plugin_creole_preinline extends DokuWiki_Syntax_Plugin {
  
   function getInfo(){
     return array(
-      'author' => 'Esther Brunner',
-      'email'  => 'wikidesign@gmail.com',
-      'date'   => '2006-10-02',
+      'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
+      'email'  => 'dokuwiki@chimeric.de',
+      'date'   => '2008-02-12',
       'name'   => 'Creole Plugin, inline preformatted component',
       'desc'   => 'Creole style preformatted text',
       'url'    => 'http://wiki.splitbrain.org/plugin:creole',

@@ -22,9 +22,9 @@ class syntax_plugin_creole_linebreak extends DokuWiki_Syntax_Plugin {
  
   function getInfo(){
     return array(
-      'author' => 'Christopher Smith',
-      'email'  => 'chris@jalakai.co.uk',
-      'date'   => '2006-10-02w',
+      'author' => 'Gina Häußge, Michael Klier, Christopher Smith',
+      'email'  => 'dokuwiki@chimeric.de',
+      'date'   => '2008-02-12',
       'name'   => 'Creole Plugin (linebreak component)',
       'desc'   => 'Provide a line break for a new line in the raw wiki data',
       'url'    => 'http://wiki.splitbrain.org/plugin:creole',

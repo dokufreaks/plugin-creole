@@ -17,12 +17,12 @@ class action_plugin_creole extends DokuWiki_Action_Plugin {
    */
   function getInfo(){
     return array(
-      'author' => 'Esther Brunner',
-      'email'  => 'wikidesign@gmail.com',
-      'date'   => '2007-02-09',
+      'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
+      'email'  => 'dokuwiki@chimeric.de',
+      'date'   => '2008-02-12',
       'name'   => 'Creole Plugin',
       'desc'   => 'Changes the editor toolbar if markup precedence is set to Creole',
-      'url'    => 'http://www.wikidesign.ch/en/plugin/creole/start',
+      'url'    => 'http://wiki.splitbrain.org/plugin:creole',
     );
   }
 
