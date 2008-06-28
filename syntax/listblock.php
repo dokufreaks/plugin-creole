@@ -100,4 +100,4 @@ class Doku_Handler_Creole_List extends Doku_Handler_List {
         return $level;
     }
 }
-//vim:ts=4:sw=4:et:enc=utf-8:
+// vim:ts=4:sw=4:et:enc=utf-8:
