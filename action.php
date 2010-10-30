@@ -48,7 +48,6 @@ class action_plugin_creole extends DokuWiki_Action_Plugin {
 
         $c = count($event->data);
         for ($i = 0; $i <= $c; $i++) {
-            if ($event->data[$i]['type'] == 'format') {
 
                 // headers
                 if (preg_match("/h(\d)\.png/", $event->data[$i]['icon'], $match)) {
@@ -64,7 +63,6 @@ class action_plugin_creole extends DokuWiki_Action_Plugin {
                 } elseif ($event->data[$i]['icon'] == 'ul.png') {
                     $event->data[$i]['open']  = "* ";
                 }
-            }
         }
 
         return true;
