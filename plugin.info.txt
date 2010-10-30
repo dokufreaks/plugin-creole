@@ -1,0 +1,8 @@
+base plugin-creole
+name plugin-creole
+author Esther Brunner, Gina Häußge, Michael Klier, Thorsten Staerk
+email wikidesign@gmail.com, dokuwiki@chimeric.de, dokuwiki@staerk.de
+date 2010-10-30
+desc Creole syntax for Dokuwiki
+url http://github.com/tstaerk/plugin-creole
+
