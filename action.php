@@ -13,20 +13,6 @@ require_once(DOKU_PLUGIN.'action.php');
 class action_plugin_creole extends DokuWiki_Action_Plugin {
 
     /**
-     * return some info
-     */
-    function getInfo() {
-        return array(
-                'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
-                'email'  => 'dokuwiki@chimeric.de',
-                'date'   => '2008-02-12',
-                'name'   => 'Creole Plugin',
-                'desc'   => 'Changes the editor toolbar if markup precedence is set to Creole',
-                'url'    => 'http://wiki.splitbrain.org/plugin:creole',
-                );
-    }
-
-    /**
      * register the eventhandlers
      */
     function register(&$contr) {
