@@ -22,7 +22,7 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
         return array(
                 'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
                 'email'  => 'dokuwiki@chimeric.de',
-                'date'   => '2008-02-12',
+                'date'   => '2010-12-01',
                 'name'   => 'Creole Plugin, header component',
                 'desc'   => 'Creole style headers',
                 'url'    => 'http://wiki.splitbrain.org/plugin:creole',
@@ -62,18 +62,6 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
         $title = trim($title);
 
         if ($handler->status['section']) $handler->_addCall('section_close', array(), $pos);
-
-        if ($level <= $conf['maxseclevel']) {
-            $handler->_addCall('section_edit', array(
-                        $handler->status['section_edit_start'],
-                        $pos-1,
-                        $handler->status['section_edit_level'],
-                        $handler->status['section_edit_title']
-                        ), $pos);
-            $handler->status['section_edit_start'] = $pos;
-            $handler->status['section_edit_level'] = $level;
-            $handler->status['section_edit_title'] = $title;
-        }
 
         $handler->_addCall('header', array($title, $level, $pos), $pos);
 
