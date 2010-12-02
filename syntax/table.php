@@ -20,7 +20,7 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
 
   function getInfo(){
     return array(
-      'author' => 'Brian Hartvigsen, Gina Häußge, Michael Klier, Esther Brunner',
+      'author' => 'Brian Hartvigsen, Gina HÃ¤uÃŸge, Michael Klier, Esther Brunner',
       'email'  => 'dokuwiki@chimeric.de',
       'date'   => '2008-02-23',
       'name'   => 'Creole Plugin, table component',
