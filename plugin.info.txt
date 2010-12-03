@@ -4,4 +4,4 @@ email wikidesign@gmail.com, dokuwiki@chimeric.de
 date 2010-12-01
 name Creole Plugin
 desc Creole syntax for Dokuwiki
-url http://github.com/dokufreaks/plugin-creole
+url http://www.dokuwiki.org/plugin:creole
