@@ -51,36 +51,29 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
   function handle($match, $state, $pos, &$handler) {
     switch ( $state ) {
       case DOKU_LEXER_ENTER:
-        $this->ReWriter = & new Doku_Handler_Table($handler->CallWriter);
-        $handler->CallWriter = & $this->ReWriter;
+        $handler->CallWriter = & new Doku_Handler_Creole_Table($handler->CallWriter);
 
         $handler->_addCall('table_start', array(), $pos);
-        //$handler->_addCall('table_row', array(), $pos);
         if ( trim($match) == '|=' ) {
           $handler->_addCall('tableheader', array(), $pos);
         } else {
           $handler->_addCall('tablecell', array(), $pos);
         }
-        $handler->CallWriter = & $this->ReWriter->CallWriter;
       break;
 
       case DOKU_LEXER_EXIT:
-        $handler->CallWriter = & $this->ReWriter;
         $handler->_addCall('table_end', array(), $pos);
         $handler->CallWriter->process();
-        $handler->CallWriter = & $this->ReWriter->CallWriter;
+        $handler->CallWriter = & $handler->CallWriter->CallWriter;
       break;
 
       case DOKU_LEXER_UNMATCHED:
         if ( trim($match) != '' ) {
-          $handler->CallWriter = & $this->ReWriter;
           $handler->_addCall('cdata',array($match), $pos);
-          $handler->CallWriter = & $this->ReWriter->CallWriter;
         }
       break;
 
       case DOKU_LEXER_MATCHED:
-        $handler->CallWriter = & $this->ReWriter;
         if ( $match == ' ' ){
           $handler->_addCall('cdata', array($match), $pos);
         } else if ( preg_match('/\t+/',$match) ) {
@@ -98,7 +91,6 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
         } else if ( $match == '|=' ) {
           $handler->_addCall('tableheader', array(), $pos);
         }
-        $handler->CallWriter = & $this->ReWriter->CallWriter;
       break;
     }
     return true;
@@ -108,3 +100,15 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
     return true;
   }
 }
+
+class Doku_Handler_Creole_Table extends Doku_Handler_Table
+{
+  function tableDefault($call) {
+    if ($call[0] == 'plugin' && $call[1][0] == 'creole_table') {
+      return;
+    }
+    else
+      $this->tableCalls[] = $call;
+  }
+}
+
