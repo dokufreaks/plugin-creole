@@ -17,6 +17,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * need to inherit from this class
  */
 class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
+  var $ReWriter;
 
   function getInfo(){
     return array(
@@ -37,24 +38,21 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
   }
 
   function connectTo($mode) {
-    $this->Lexer->addEntryPattern('\n\|=',$mode,'plugin_creole_table');
-    $this->Lexer->addEntryPattern('\n\|',$mode,'plugin_creole_table');
+    $this->Lexer->addEntryPattern('\n\|=?',$mode,'plugin_creole_table');
   }
 
   function postConnect() {
-    $this->Lexer->addPattern('\n\|=','plugin_creole_table');
-    $this->Lexer->addPattern('\n\|','plugin_creole_table');
+    $this->Lexer->addPattern('\n\|=?','plugin_creole_table');
     $this->Lexer->addPattern('[\t ]+','plugin_creole_table');
-    $this->Lexer->addPattern('\|=','plugin_creole_table');
-    $this->Lexer->addPattern('\|','plugin_creole_table');
+    $this->Lexer->addPattern('\|=?','plugin_creole_table');
     $this->Lexer->addExitPattern('\n','plugin_creole_table');
   }
   
   function handle($match, $state, $pos, &$handler) {
     switch ( $state ) {
       case DOKU_LEXER_ENTER:
-        $ReWriter = & new Doku_Handler_Table($handler->CallWriter);
-        $handler->CallWriter = & $ReWriter;
+        $this->ReWriter = & new Doku_Handler_Table($handler->CallWriter);
+        $handler->CallWriter = & $this->ReWriter;
 
         $handler->_addCall('table_start', array(), $pos);
         //$handler->_addCall('table_row', array(), $pos);
@@ -63,22 +61,26 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
         } else {
           $handler->_addCall('tablecell', array(), $pos);
         }
+        $handler->CallWriter = & $this->ReWriter->CallWriter;
       break;
 
       case DOKU_LEXER_EXIT:
+        $handler->CallWriter = & $this->ReWriter;
         $handler->_addCall('table_end', array(), $pos);
         $handler->CallWriter->process();
-        $ReWriter = & $handler->CallWriter;
-        $handler->CallWriter = & $ReWriter->CallWriter;
+        $handler->CallWriter = & $this->ReWriter->CallWriter;
       break;
 
       case DOKU_LEXER_UNMATCHED:
         if ( trim($match) != '' ) {
+          $handler->CallWriter = & $this->ReWriter;
           $handler->_addCall('cdata',array($match), $pos);
+          $handler->CallWriter = & $this->ReWriter->CallWriter;
         }
       break;
 
       case DOKU_LEXER_MATCHED:
+        $handler->CallWriter = & $this->ReWriter;
         if ( $match == ' ' ){
           $handler->_addCall('cdata', array($match), $pos);
         } else if ( preg_match('/\t+/',$match) ) {
@@ -96,6 +98,7 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
         } else if ( $match == '|=' ) {
           $handler->_addCall('tableheader', array(), $pos);
         }
+        $handler->CallWriter = & $this->ReWriter->CallWriter;
       break;
     }
     return true;
