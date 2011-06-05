@@ -17,6 +17,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * need to inherit from this class
  */
 class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
+  var $ReWriter;
 
   function getInfo(){
     return array(
@@ -37,27 +38,22 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
   }
 
   function connectTo($mode) {
-    $this->Lexer->addEntryPattern('\n\|=',$mode,'plugin_creole_table');
-    $this->Lexer->addEntryPattern('\n\|',$mode,'plugin_creole_table');
+    $this->Lexer->addEntryPattern('\n\|=?',$mode,'plugin_creole_table');
   }
 
   function postConnect() {
-    $this->Lexer->addPattern('\n\|=','plugin_creole_table');
-    $this->Lexer->addPattern('\n\|','plugin_creole_table');
+    $this->Lexer->addPattern('\n\|=?','plugin_creole_table');
     $this->Lexer->addPattern('[\t ]+','plugin_creole_table');
-    $this->Lexer->addPattern('\|=','plugin_creole_table');
-    $this->Lexer->addPattern('\|','plugin_creole_table');
+    $this->Lexer->addPattern('\|=?','plugin_creole_table');
     $this->Lexer->addExitPattern('\n','plugin_creole_table');
   }
   
   function handle($match, $state, $pos, &$handler) {
     switch ( $state ) {
       case DOKU_LEXER_ENTER:
-        $ReWriter = & new Doku_Handler_Table($handler->CallWriter);
-        $handler->CallWriter = & $ReWriter;
+        $handler->CallWriter = & new Doku_Handler_Creole_Table($handler->CallWriter);
 
         $handler->_addCall('table_start', array(), $pos);
-        //$handler->_addCall('table_row', array(), $pos);
         if ( trim($match) == '|=' ) {
           $handler->_addCall('tableheader', array(), $pos);
         } else {
@@ -68,8 +64,7 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
       case DOKU_LEXER_EXIT:
         $handler->_addCall('table_end', array(), $pos);
         $handler->CallWriter->process();
-        $ReWriter = & $handler->CallWriter;
-        $handler->CallWriter = & $ReWriter->CallWriter;
+        $handler->CallWriter = & $handler->CallWriter->CallWriter;
       break;
 
       case DOKU_LEXER_UNMATCHED:
@@ -105,3 +100,15 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
     return true;
   }
 }
+
+class Doku_Handler_Creole_Table extends Doku_Handler_Table
+{
+  function tableDefault($call) {
+    if ($call[0] == 'plugin' && $call[1][0] == 'creole_table') {
+      return;
+    }
+    else
+      $this->tableCalls[] = $call;
+  }
+}
+
