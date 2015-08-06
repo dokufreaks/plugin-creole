@@ -48,14 +48,14 @@ class syntax_plugin_creole_preblock extends DokuWiki_Syntax_Plugin {
                 );
     }
 
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler $handler) {
         if ($state == DOKU_LEXER_UNMATCHED) {
             $handler->_addCall('preformatted', array($match), $pos);
         }
         return true;
     }
 
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
         return true;
     }
 }

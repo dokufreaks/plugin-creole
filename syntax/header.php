@@ -45,7 +45,7 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
                 );
     }
 
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler $handler) {
         global $conf;
 
         // get level and title
@@ -70,7 +70,7 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
         return true;
     }
 
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
         return true;
     }
 }

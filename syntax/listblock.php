@@ -56,11 +56,11 @@ class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
                 );
     }
 
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler $handler) {
         switch ($state) {
             case DOKU_LEXER_ENTER:
-                $ReWriter = & new Doku_Handler_List($handler->CallWriter);
-                $ReWriter = & new Doku_Handler_Creole_List($handler->CallWriter);
+                $ReWriter = new Doku_Handler_List($handler->CallWriter);
+                $ReWriter = new Doku_Handler_Creole_List($handler->CallWriter);
                 $handler->CallWriter = & $ReWriter;
                 $handler->_addCall('list_open', array($match), $pos);
                 break;
@@ -80,7 +80,7 @@ class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
         return true;
     }
 
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
         return true;
     }
 }

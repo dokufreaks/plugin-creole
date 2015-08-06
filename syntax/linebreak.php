@@ -42,13 +42,13 @@ class syntax_plugin_creole_linebreak extends DokuWiki_Syntax_Plugin {
 				); 
 	}
 
-	function handle($match, $state, $pos, &$handler) { 
+	function handle($match, $state, $pos, Doku_Handler $handler) { 
 
 		if ($match == "\n") return true;
 		return false;
 	}
 
-	function render($mode, &$renderer, $data) {
+	function render($mode, Doku_Renderer $renderer, $data) {
 
 		if($mode == 'xhtml') {
 			if ($data) $renderer->doc .= "<br />";

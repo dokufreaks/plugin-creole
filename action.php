@@ -15,8 +15,8 @@ class action_plugin_creole extends DokuWiki_Action_Plugin {
     /**
      * register the eventhandlers
      */
-    function register(&$contr) {
-        $contr->register_hook('TOOLBAR_DEFINE',
+    function register(Doku_Event_Handler $controller) {
+        $controller->register_hook('TOOLBAR_DEFINE',
                 'AFTER',
                 $this,
                 'define_toolbar',
