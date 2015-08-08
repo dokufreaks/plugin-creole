@@ -2,9 +2,13 @@
 /**
  * Options for the Creole Plugin
  */
-$conf['precedence'] = 'dokuwiki';     // markup precedence when conflicting:
-                                      // 'dokuwiki' (default) or 'creole'
-$conf['monospace'] = 'Use <tt> tag';  // Use <tt> tag for monospace
-                                      // as suggested in Creole specs
+// markup precedence when conflicting: 'dokuwiki' (default) or 'creole'
+$conf['precedence'] = 'dokuwiki';
+
+// Use <tt> tag for monospace as suggested in Creole specs
+$conf['monospace'] = 'Use <tt> tag';
+
+// Insert whitespace for linebreaks as per Creole 1.0
+$conf['linebreak'] = 'Whitespace';
 
 //Setup VIM: ex: et ts=2 enc=utf-8 :

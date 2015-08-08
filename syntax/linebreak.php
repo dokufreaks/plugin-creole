@@ -20,41 +20,47 @@ require_once(DOKU_PLUGIN.'syntax.php');
  */
 class syntax_plugin_creole_linebreak extends DokuWiki_Syntax_Plugin {
 
-	function getInfo() {
-		return array(
-				'author' => 'Gina Häußge, Michael Klier, Christopher Smith',
-				'email'  => 'dokuwiki@chimeric.de',
-				'date'   => '2008-02-12',
-				'name'   => 'Creole Plugin (linebreak component)',
-				'desc'   => 'Provide a line break for a new line in the raw wiki data',
-				'url'    => 'http://wiki.splitbrain.org/plugin:creole',
-				);
-	}
+    function getInfo() {
+        return array(
+                'author' => 'Gina HÃ¤uÃge, Michael Klier, Christopher Smith',
+                'email'  => 'dokuwiki@chimeric.de',
+                'date'   => '2008-02-12',
+                'name'   => 'Creole Plugin (linebreak component)',
+                'desc'   => 'Provide a line break for a new line in the raw wiki data',
+                'url'    => 'http://wiki.splitbrain.org/plugin:creole',
+                );
+    }
 
-	function getType() { return 'substition'; }
-	function getSort() { return 100; }
+    function getType() { return 'substition'; }
+    function getSort() { return 100; }
 
-	function connectTo($mode) {
-		$this->Lexer->addSpecialPattern(
-				'(?<!^|\n)\n(?!\n|>)',
-				$mode,
-				'plugin_creole_linebreak'
-				); 
-	}
+    function connectTo($mode) {
+        $this->Lexer->addSpecialPattern(
+                '(?<!^|\n)\n(?!\n|>)',
+                $mode,
+                'plugin_creole_linebreak'
+                ); 
+    }
 
-	function handle($match, $state, $pos, Doku_Handler $handler) { 
+    function handle($match, $state, $pos, Doku_Handler $handler) { 
 
-		if ($match == "\n") return true;
-		return false;
-	}
+        if ($match == "\n") return true;
+        return false;
+    }
 
-	function render($mode, Doku_Renderer $renderer, $data) {
-
-		if($mode == 'xhtml') {
-			if ($data) $renderer->doc .= "<br />";
-			return true;
-		}
-		return false;
-	}
+    function render($mode, Doku_Renderer $renderer, $data) {
+        if($mode == 'xhtml') {
+            if ($data) {
+                if ( $this->getConf('linebreak') == 'Linebreak' ) {
+                    $renderer->doc .= "<br />";
+                } else {
+                    $renderer->doc .= " ";
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }
 // vim:ts=4:sw=4:et:enc=utf-8:
+

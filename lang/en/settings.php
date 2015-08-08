@@ -11,5 +11,6 @@ $lang['precedence']            = 'Markup precedence';
 $lang['precedence_o_dokuwiki'] = 'DokuWiki';
 $lang['precedence_o_creole']   = 'Creole';
 $lang['monospace']             = 'Monospace behaviour';
+$lang['linebreak']             = 'Replace a linebreak with';
 
 //Setup VIM: ex: et ts=2 enc=utf-8 :
