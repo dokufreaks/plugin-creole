@@ -51,7 +51,7 @@ class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
 
     function postConnect() {
         $this->Lexer->addExitPattern(
-                '\n',
+                '\n\n',
                 'plugin_creole_listblock'
                 );
     }
