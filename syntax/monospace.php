@@ -48,21 +48,40 @@ class syntax_plugin_creole_monospace extends DokuWiki_Syntax_Plugin {
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
+        global $conf;
+
         switch ($state) {
             case DOKU_LEXER_ENTER:
-                $handler->_addCall('monospace_open', array(), $pos);
+                if ( $this->getConf('monospace') == 'DokuWiki' ) {
+                    $handler->_addCall('monospace_open', array(), $pos);
+                } else {
+                    return array($state);
+                }
                 break;
             case DOKU_LEXER_UNMATCHED:
                 $handler->_addCall('cdata', array($match), $pos);
                 break;
             case DOKU_LEXER_EXIT:
-                $handler->_addCall('monospace_close', array(), $pos);
-                break;
+                if ( $this->getConf('monospace') == 'DokuWiki' ) {
+                    $handler->_addCall('monospace_close', array(), $pos);
+                } else {
+                    return array($state);
+                }
+                break;            
         }
         return true;
     }
 
     function render($mode, Doku_Renderer $renderer, $data) {
+        list($state) = $data;
+        switch ($state) {
+            case DOKU_LEXER_ENTER :
+                $renderer->doc .= '<tt>';
+                break;
+            case DOKU_LEXER_EXIT :
+                $renderer->doc .= '</tt>';
+                break;
+        }
         return true;
     }
 }

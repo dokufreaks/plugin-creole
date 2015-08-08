@@ -10,5 +10,6 @@
 $lang['precedence']            = 'Vorrang für Syntax-Dialekt';
 $lang['precedence_o_dokuwiki'] = 'DokuWiki';
 $lang['precedence_o_creole']   = 'Creole';
+$lang['monospace']             = 'Monospace-Verhalten';
 
 //Setup VIM: ex: et ts=2 enc=utf-8 :
