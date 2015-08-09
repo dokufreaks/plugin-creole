@@ -46,9 +46,16 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
+        global $conf;
+
         // get level and title
         $title = trim($match);
-        $level = strspn($title, '=');
+        if (($this->getConf('precedence') == 'dokuwiki')
+                && ($title{strlen($title) - 1} == '=')) { // DokuWiki
+            $level = 7 - strspn($title, '=');
+        } else {                                   // Creole
+            $level = strspn($title, '=');
+        }
         if ($level < 1) $level = 1;
         elseif ($level > 5) $level = 5;
         $title = trim($title, '=');
