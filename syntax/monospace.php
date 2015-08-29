@@ -17,6 +17,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * need to inherit from this class
  */
 class syntax_plugin_creole_monospace extends DokuWiki_Syntax_Plugin {
+    var $eventhandler = NULL;
 
     function getInfo() {
         return array(
@@ -33,28 +34,39 @@ class syntax_plugin_creole_monospace extends DokuWiki_Syntax_Plugin {
     function getSort() { return 102; }
 
     function connectTo($mode) {
-        $this->Lexer->addEntryPattern(
-                '##(?=.*?##)',
+        $this->Lexer->addSpecialPattern(
+                '##',
                 $mode,
                 'plugin_creole_monospace'
-                );
+                ); 
     }
 
-    function postConnect() {
-        $this->Lexer->addExitPattern(
-                '##',
-                'plugin_creole_monospace'
-                );
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->eventhandler = plugin_load('helper', 'creole_eventhandler');
+        $this->eventhandler->addOnNotify('insert', 'header', 'header',
+                                         'open', 'monospace', NULL,
+                                         array($this, 'onHeaderCallback'));
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
         global $conf;
 
+        if ( $this->eventhandler->queuedEventExists ('open', 'monospace', NULL) == false ) {
+            $state = DOKU_LEXER_ENTER;
+        } else {
+            $state = DOKU_LEXER_EXIT;
+        }
+
         switch ($state) {
             case DOKU_LEXER_ENTER:
                 if ( $this->getConf('monospace') == 'DokuWiki' ) {
+                    $this->eventhandler->notifyEvent('open', 'monospace', 'dw-monospace', $pos, $match, $handler);
                     $handler->_addCall('monospace_open', array(), $pos);
                 } else {
+                    $this->eventhandler->notifyEvent('open', 'monospace', 'creole-monospace', $pos, $match, $handler);
                     return array($state);
                 }
                 break;
@@ -63,8 +75,10 @@ class syntax_plugin_creole_monospace extends DokuWiki_Syntax_Plugin {
                 break;
             case DOKU_LEXER_EXIT:
                 if ( $this->getConf('monospace') == 'DokuWiki' ) {
+                    $this->eventhandler->notifyEvent('close', 'monospace', 'dw-monospace', $pos, $match, $handler);
                     $handler->_addCall('monospace_close', array(), $pos);
                 } else {
+                    $this->eventhandler->notifyEvent('close', 'monospace', 'creole-monospace', $pos, $match, $handler);
                     return array($state);
                 }
                 break;            
@@ -83,6 +97,18 @@ class syntax_plugin_creole_monospace extends DokuWiki_Syntax_Plugin {
                 break;
         }
         return true;
+    }
+
+    public function onHeaderCallback (creole_syntax_event $myEvent, $pos, $match, $handler) {
+        $this->eventhandler->notifyEvent('close', 'monospace', 'dw-monospace', $pos, $match, $handler);
+        switch ($myEvent->getTag() == 'dw-monospace') {
+            case 'dw-monospace':
+                $handler->_addCall('monospace_close', array(), $pos);
+                break;
+            case 'creole-monospace':
+                $this->eventhandler->writeCall('creole_monospace', DOKU_LEXER_EXIT, NULL, NULL, $pos, $match, $handler);
+                break;
+        }
     }
 }
 // vim:ts=4:sw=4:et:enc=utf-8:
