@@ -49,6 +49,15 @@ class syntax_plugin_creole_subscript extends DokuWiki_Syntax_Plugin {
         $this->eventhandler->addOnNotify('insert', 'header', 'header',
                                          'open', 'subscript', NULL,
                                          array($this, 'onHeaderCallback'));
+        $this->eventhandler->addOnNotify('found', 'emptyline', NULL,
+                                         'open', 'subscript', NULL,
+                                         array($this, 'onHeaderCallback'));
+        $this->eventhandler->addOnNotify('open', 'list', NULL,
+                                         'open', 'subscript', NULL,
+                                         array($this, 'onHeaderCallback'));
+        $this->eventhandler->addOnNotify('open', 'table', NULL,
+                                         'open', 'subscript', NULL,
+                                         array($this, 'onHeaderCallback'));
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {

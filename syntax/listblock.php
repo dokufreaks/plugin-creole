@@ -17,6 +17,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * need to inherit from this class
  */
 class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
+    var $eventhandler = NULL;
 
     function getInfo() {
         return array(
@@ -51,20 +52,29 @@ class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
 
     function postConnect() {
         $this->Lexer->addExitPattern(
-                '\n\n',
+                '\n',
                 'plugin_creole_listblock'
                 );
+    }
+
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->eventhandler = plugin_load('helper', 'creole_eventhandler');
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
         switch ($state) {
             case DOKU_LEXER_ENTER:
+                $this->eventhandler->notifyEvent('open', 'list', NULL, $pos, $match, $handler);
                 $ReWriter = new Doku_Handler_List($handler->CallWriter);
                 $ReWriter = new Doku_Handler_Creole_List($handler->CallWriter);
                 $handler->CallWriter = & $ReWriter;
                 $handler->_addCall('list_open', array($match), $pos);
                 break;
             case DOKU_LEXER_EXIT:
+                $this->eventhandler->notifyEvent('close', 'list', NULL, $pos, $match, $handler);
                 $handler->_addCall('list_close', array(), $pos);
                 $handler->CallWriter->process();
                 $ReWriter = & $handler->CallWriter;

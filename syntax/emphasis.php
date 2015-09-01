@@ -49,6 +49,15 @@ class syntax_plugin_creole_emphasis extends DokuWiki_Syntax_Plugin {
         $this->eventhandler->addOnNotify('insert', 'header', 'header',
                                          'open', 'emphasis', NULL,
                                          array($this, 'onHeaderCallback'));
+        $this->eventhandler->addOnNotify('found', 'emptyline', NULL,
+                                         'open', 'emphasis', NULL,
+                                         array($this, 'onHeaderCallback'));
+        $this->eventhandler->addOnNotify('open', 'list', NULL,
+                                         'open', 'emphasis', NULL,
+                                         array($this, 'onHeaderCallback'));
+        $this->eventhandler->addOnNotify('open', 'table', NULL,
+                                         'open', 'emphasis', NULL,
+                                         array($this, 'onHeaderCallback'));
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {

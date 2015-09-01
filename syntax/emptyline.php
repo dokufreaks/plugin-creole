@@ -1,11 +1,10 @@
 <?php
 /**
- * Creole Plugin, linebreak component: Inserts a line break
- * based on Linebreak Plugin http://wiki.splitbrain.org/plugin:linebreak
+ * Creole Plugin, emptyline component: notifies
+ * other creole syntax components that an empty line was detected.
  * 
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @author     Christopher Smith <chris@jalakai.co.uk>
- * @author     Esther Brunner <wikidesign@gmail.com>
+ * @author     LarsDW223
  */
 
 // must be run within Dokuwiki
@@ -18,46 +17,58 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
  */
-class syntax_plugin_creole_linebreak extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_creole_emptyline extends DokuWiki_Syntax_Plugin {
+    var $eventhandler = NULL;
+
     function getInfo() {
         return array(
                 'author' => 'Gina HÃ¤uÃge, Michael Klier, Christopher Smith',
                 'email'  => 'dokuwiki@chimeric.de',
-                'date'   => '2008-02-12',
-                'name'   => 'Creole Plugin (linebreak component)',
-                'desc'   => 'Provide a line break for a new line in the raw wiki data',
+                'date'   => '2015-08-30',
+                'name'   => 'Creole Plugin (emptyline component)',
+                'desc'   => 'Provide a notification if an empty line is detected.',
                 'url'    => 'http://wiki.splitbrain.org/plugin:creole',
                 );
     }
 
     function getType() { return 'substition'; }
-    function getSort() { return 100; }
+    function getPType() { return 'block'; }
+    function getSort() { return 99; }
 
     function connectTo($mode) {
         $this->Lexer->addSpecialPattern(
-                '(?<!^|\n)\n(?!\n|>)',
+                '\n(?=\n)',
                 $mode,
-                'plugin_creole_linebreak'
-                ); 
+                'plugin_creole_emptyline'
+                );
     }
 
-    function handle($match, $state, $pos, Doku_Handler $handler) { 
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->eventhandler = plugin_load('helper', 'creole_eventhandler');
+    }
 
-        if ($match == "\n") return true;
+    function handle($match, $state, $pos, Doku_Handler $handler) {
+        if ( $state == DOKU_LEXER_SPECIAL  ) {
+            $this->eventhandler->notifyEvent('found', 'emptyline', NULL, $pos, $match, $handler);
+            return true;
+        }
         return false;
     }
 
     function render($mode, Doku_Renderer $renderer, $data) {
-        if($mode == 'xhtml') {
+        /*if($mode == 'xhtml') {
             if ($data) {
                 if ( $this->getConf('linebreak') == 'Linebreak' ) {
-                    $renderer->doc .= "<br />";
+                    $renderer->doc .= "<br /><br />";
                 } else {
                     $renderer->doc .= " ";
                 }
             }
             return true;
-        }
+        }*/
         return false;
     }
 }
