@@ -120,6 +120,15 @@ class helper_plugin_creole_eventhandler extends DokuWiki_Plugin {
     protected static $trace_dump = 'syntax_plugin_creole_base - Trace-Dump:<br/>';
 
     /**
+     * Constructor.
+     */
+    public function __construct() {
+        self::$queue = array();
+        self::$callbacks = array();
+        self::$trace_dump = 'syntax_plugin_creole_base - Trace-Dump:<br/>';
+    }
+
+    /**
      * @return array
      */
     function getMethods() {
@@ -134,7 +143,7 @@ class helper_plugin_creole_eventhandler extends DokuWiki_Plugin {
     }
 
     public function addOnNotify ($state, $clazz, $tag, $ownState, $ownClazz, $ownTag, $callback) {
-        $this->callbacks [] = new creole_state_callback
+        self::$callbacks [] = new creole_state_callback
             ($state, $clazz, $tag, $ownState, $ownClazz, $ownTag, $callback);
     }
 
@@ -147,37 +156,37 @@ class helper_plugin_creole_eventhandler extends DokuWiki_Plugin {
         
         // Callback all functions registered for this event,
         // if they have got an event in the queue.
-        $q_max = count($this->queue);
+        $q_max = count(self::$queue);
         for ( $q_index = $q_max-1 ; $q_index >= 0 ; $q_index-- ) {
-            for ( $cb_index = 0 ; $cb_index < count ($this->callbacks) ; $cb_index++ ) {
-                if ( $this->queue[$q_index] != NULL &&
-                     $this->callbacks [$cb_index]->eventMatches($event) &&
-                     $this->callbacks [$cb_index]->ownEventMatches($this->queue[$q_index]) ) {
+            for ( $cb_index = 0 ; $cb_index < count (self::$callbacks) ; $cb_index++ ) {
+                if ( self::$queue[$q_index] != NULL &&
+                     self::$callbacks [$cb_index]->eventMatches($event) &&
+                     self::$callbacks [$cb_index]->ownEventMatches(self::$queue[$q_index]) ) {
                     // Match found, call callback function.
-                    $this->callbacks [$cb_index]->execute($this->queue [$q_index], $pos, $match, $handler);
+                    self::$callbacks [$cb_index]->execute(self::$queue [$q_index], $pos, $match, $handler);
                 }
             }
         }
         
         if ( $state == 'open' ) {
-            $this->queue [] = $event;
+            self::$queue [] = $event;
         }
         if ( $state == 'close' ) {
             // Remove an matching open event from the queue.
             // Change state of this event to open and search for it.
             $event->setState('open');
-            for ( $q_index = 0 ; $q_index < count($this->queue) ; $q_index++ ) {
-                if ( $event->equal($this->queue [$q_index]) ) {
-                    $this->queue [$q_index] = NULL;
+            for ( $q_index = 0 ; $q_index < count(self::$queue) ; $q_index++ ) {
+                if ( $event->equal(self::$queue [$q_index]) ) {
+                    self::$queue [$q_index] = NULL;
                 }
             }
         }
     }
 
     public function queuedEventExists ($state, $clazz, $tag) {
-        for ( $q_index = 0 ; $q_index < count($this->queue) ; $q_index++ ) {
-            if ( $this->queue [$q_index] != NULL &&
-                 $this->queue [$q_index]->equalToValues($state, $clazz, $tag) ) {
+        for ( $q_index = 0 ; $q_index < count(self::$queue) ; $q_index++ ) {
+            if ( self::$queue [$q_index] != NULL &&
+                 self::$queue [$q_index]->equalToValues($state, $clazz, $tag) ) {
                 return true;
             }
         }
@@ -193,11 +202,11 @@ class helper_plugin_creole_eventhandler extends DokuWiki_Plugin {
     }
     
     public function getTraceDump () {
-        return $this->trace_dump;
+        return self::$trace_dump;
     }
     
     public function addToTraceDump ($content) {
-        $this->trace_dump .= $content;
+        self::$trace_dump .= $content;
     }    
 }
 // vim:ts=4:sw=4:et:enc=utf-8:
