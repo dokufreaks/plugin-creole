@@ -20,17 +20,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
  */
 class syntax_plugin_creole_linebreak extends DokuWiki_Syntax_Plugin {
 
-    function getInfo() {
-        return array(
-                'author' => 'Gina HÃ¤uÃge, Michael Klier, Christopher Smith',
-                'email'  => 'dokuwiki@chimeric.de',
-                'date'   => '2008-02-12',
-                'name'   => 'Creole Plugin (linebreak component)',
-                'desc'   => 'Provide a line break for a new line in the raw wiki data',
-                'url'    => 'http://wiki.splitbrain.org/plugin:creole',
-                );
-    }
-
     function getType() { return 'substition'; }
     function getSort() { return 100; }
 

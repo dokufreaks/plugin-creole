@@ -17,17 +17,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * need to inherit from this class
  */
 class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
-
-  function getInfo(){
-    return array(
-      'author' => 'Brian Hartvigsen, Gina Häußge, Michael Klier, Esther Brunner',
-      'email'  => 'dokuwiki@chimeric.de',
-      'date'   => '2008-02-23',
-      'name'   => 'Creole Plugin, table component',
-      'desc'   => 'Creole style tables',
-      'url'    => 'http://wiki.splitbrain.org/plugin:creole',
-    );
-  }
   
   function getType() { return 'container'; }
   function getSort() { return 59; }

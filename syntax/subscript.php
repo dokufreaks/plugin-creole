@@ -18,17 +18,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
  */
 class syntax_plugin_creole_subscript extends DokuWiki_Syntax_Plugin {
 
-    function getInfo() {
-        return array(
-                'author' => 'Gina Häußge, Michael Klier, Esther Brunner, LarsDW223',
-                'email'  => 'dokuwiki@chimeric.de',
-                'date'   => '2015-08-04',
-                'name'   => 'Creole Plugin, subscript component',
-                'desc'   => 'Creole style subscripted text',
-                'url'    => 'http://wiki.splitbrain.org/plugin:creole',
-                );
-    }
-
     function getType() { return 'protected'; }
     function getSort() { return 102; }
 
