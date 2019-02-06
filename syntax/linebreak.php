@@ -52,4 +52,3 @@ class syntax_plugin_creole_linebreak extends DokuWiki_Syntax_Plugin {
     }
 }
 // vim:ts=4:sw=4:et:enc=utf-8:
-

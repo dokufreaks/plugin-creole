@@ -247,7 +247,7 @@ class plugin_creole_test extends DokuWikiTest {
      */
     public function test_bold_multiline() {
         $info = array();
-        $expected = "\n<p>\nCharacter formatting extends across line breaks: <strong>bold, this is still bold. This line deliberately does not end in star-star.</strong>\n\nNot bold. Character formatting does not cross paragraph boundaries. \n</p>\n";
+        $expected = "\n<p>\nCharacter formatting extends across line breaks: <strong>bold, this is still bold. This line deliberately does not end in star-star.</strong>\n</p>\n\n<p>\nNot bold. Character formatting does not cross paragraph boundaries. \n</p>\n";
 
         $source = "Character formatting extends across line breaks: **bold,\nthis is still bold. This line deliberately does not end in star-star.\n\nNot bold. Character formatting does not cross paragraph boundaries.";
         $instructions = p_get_instructions($source);

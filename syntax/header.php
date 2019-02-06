@@ -17,6 +17,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * need to inherit from this class
  */
 class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
+    var $eventhandler = NULL;
 
     function getType() { return 'container'; }
     function getPType() { return 'block'; }
@@ -32,6 +33,14 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
                 'base',
                 'plugin_creole_header'
                 );
+        $this->eventhandler = plugin_load('helper', 'creole_eventhandler');
+    }
+
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->eventhandler = plugin_load('helper', 'creole_eventhandler');
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
@@ -49,6 +58,8 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
         elseif ($level > 5) $level = 5;
         $title = trim($title, '=');
         $title = trim($title);
+
+        $this->eventhandler->notifyEvent('insert', 'header', 'header', $pos, $match, $handler);
 
         if ($handler->status['section']) $handler->_addCall('section_close', array(), $pos);
 

@@ -38,10 +38,18 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
     $this->Lexer->addPattern('\|','plugin_creole_table');
     $this->Lexer->addExitPattern('\n','plugin_creole_table');
   }
+
+  /**
+   * Constructor.
+   */
+  public function __construct() {
+    $this->eventhandler = plugin_load('helper', 'creole_eventhandler');
+  }
   
   function handle($match, $state, $pos, Doku_Handler $handler) {
     switch ( $state ) {
       case DOKU_LEXER_ENTER:
+        $this->eventhandler->notifyEvent('open', 'table', NULL, $pos, $match, $handler);
         $ReWriter = new Doku_Handler_Table($handler->CallWriter);
         $handler->CallWriter = & $ReWriter;
 
@@ -55,6 +63,7 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
       break;
 
       case DOKU_LEXER_EXIT:
+        $this->eventhandler->notifyEvent('close', 'table', NULL, $pos, $match, $handler);
         $handler->_addCall('table_end', array(), $pos);
         $handler->CallWriter->process();
         $ReWriter = & $handler->CallWriter;

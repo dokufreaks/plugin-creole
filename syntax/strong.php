@@ -1,6 +1,6 @@
 <?php
 /**
- * Creole Plugin, superscript component: Creole style superscripted text
+ * Creole Plugin, strong component: Creole style strong text
  * 
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     LarsDW223
@@ -16,17 +16,28 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
  */
-class syntax_plugin_creole_superscript extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_creole_strong extends DokuWiki_Syntax_Plugin {
     var $eventhandler = NULL;
 
+    function getInfo() {
+        return array(
+                'author' => 'Gina Häußge, Michael Klier, Esther Brunner, LarsDW223',
+                'email'  => 'dokuwiki@chimeric.de',
+                'date'   => '2015-08-29',
+                'name'   => 'Creole Plugin, strong component',
+                'desc'   => 'Creole style strong text',
+                'url'    => 'http://wiki.splitbrain.org/plugin:creole',
+                );
+    }
+
     function getType() { return 'protected'; }
-    function getSort() { return 102; }
+    function getSort() { return 9; }
 
     function connectTo($mode) {
         $this->Lexer->addSpecialPattern(
-                '\^\^',
+                '\*\*',
                 $mode,
-                'plugin_creole_superscript'
+                'plugin_creole_strong'
                 ); 
     }
 
@@ -36,21 +47,21 @@ class syntax_plugin_creole_superscript extends DokuWiki_Syntax_Plugin {
     public function __construct() {
         $this->eventhandler = plugin_load('helper', 'creole_eventhandler');
         $this->eventhandler->addOnNotify('insert', 'header', 'header',
-                                         'open', 'superscript', NULL,
+                                         'open', 'strong', NULL,
                                          array($this, 'onHeaderCallback'));
         $this->eventhandler->addOnNotify('found', 'emptyline', NULL,
-                                         'open', 'superscript', NULL,
+                                         'open', 'strong', NULL,
                                          array($this, 'onHeaderCallback'));
         $this->eventhandler->addOnNotify('open', 'list', NULL,
-                                         'open', 'superscript', NULL,
+                                         'open', 'strong', NULL,
                                          array($this, 'onHeaderCallback'));
         $this->eventhandler->addOnNotify('open', 'table', NULL,
-                                         'open', 'superscript', NULL,
+                                         'open', 'strong', NULL,
                                          array($this, 'onHeaderCallback'));
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
-        if ( $this->eventhandler->queuedEventExists ('open', 'superscript', NULL) == false ) {
+        if ( $this->eventhandler->queuedEventExists ('open', 'strong', NULL) == false ) {
             $state = DOKU_LEXER_ENTER;
         } else {
             $state = DOKU_LEXER_EXIT;
@@ -58,16 +69,16 @@ class syntax_plugin_creole_superscript extends DokuWiki_Syntax_Plugin {
 
         switch ($state) {
             case DOKU_LEXER_ENTER:
-                $this->eventhandler->notifyEvent('open', 'superscript', NULL, $pos, $match, $handler);
-                $handler->_addCall('superscript_open', array(), $pos);
+                $this->eventhandler->notifyEvent('open', 'strong', NULL, $pos, $match, $handler);
+                $handler->_addCall('strong_open', array(), $pos);
                 break;
             case DOKU_LEXER_UNMATCHED:
                 //$handler->_addCall('unformatted', array($match), $pos);
                 $handler->_addCall('cdata', array($match), $pos);
                 break;
             case DOKU_LEXER_EXIT:
-                $this->eventhandler->notifyEvent('close', 'superscript', NULL, $pos, $match, $handler);
-                $handler->_addCall('superscript_close', array(), $pos);
+                $this->eventhandler->notifyEvent('close', 'strong', NULL, $pos, $match, $handler);
+                $handler->_addCall('strong_close', array(), $pos);
                 break;
         }
         return true;
@@ -78,8 +89,8 @@ class syntax_plugin_creole_superscript extends DokuWiki_Syntax_Plugin {
     }
 
     public function onHeaderCallback (creole_syntax_event $myEvent, $pos, $match, $handler) {
-        $this->eventhandler->notifyEvent('close', 'superscript', NULL, $pos, $match, $handler);
-        $handler->_addCall('superscript_close', array(), $pos);
+        $this->eventhandler->notifyEvent('close', 'strong', NULL, $pos, $match, $handler);
+        $handler->_addCall('strong_close', array(), $pos);
     }
 }
 // vim:ts=4:sw=4:et:enc=utf-8:
