@@ -18,17 +18,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
  */
 class syntax_plugin_creole_preinline extends DokuWiki_Syntax_Plugin {
 
-    function getInfo() {
-        return array(
-                'author' => 'Gina Häußge, Michael Klier, Esther Brunner',
-                'email'  => 'dokuwiki@chimeric.de',
-                'date'   => '2008-02-12',
-                'name'   => 'Creole Plugin, inline preformatted component',
-                'desc'   => 'Creole style preformatted text',
-                'url'    => 'http://wiki.splitbrain.org/plugin:creole',
-                );
-    }
-
     function getType() { return 'protected'; }
     function getSort() { return 102; }
 
