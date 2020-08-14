@@ -6,6 +6,8 @@
  * @author     Esther Brunner <wikidesign@gmail.com>
  */
 
+use dokuwiki\Parsing\Handler\Lists;
+
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
@@ -86,7 +88,7 @@ class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
 
 /* ----- Creole List Call Writer ----- */
 
-class Doku_Handler_Creole_List extends Doku_Handler_List {
+class Doku_Handler_Creole_List extends Lists {
 
     function interpretSyntax($match, &$type) {
         if (substr($match,-1) == '*') $type = 'u';
