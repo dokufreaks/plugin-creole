@@ -1,7 +1,7 @@
 <?php
 /**
  * Creole Plugin, header component: Creole style headers
- * 
+ *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     Esther Brunner <wikidesign@gmail.com>
  */
@@ -61,11 +61,11 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
 
         $this->eventhandler->notifyEvent('insert', 'header', 'header', $pos, $match, $handler);
 
-        if ($handler->getStatus('section')) $handler->calls[] = array('section_close', array(), $pos);
+        if ($handler->getStatus('section')) $handler->addCall('section_close', array(), $pos);
 
-        $handler->calls[] = array('header', array($title, $level, $pos), $pos);
+        $handler->addCall('header', array($title, $level, $pos), $pos);
 
-        $handler->calls[] = array('section_open', array($level), $pos);
+        $handler->addCall('section_open', array($level), $pos);
         $handler->setStatus('section', true) ;
         return true;
     }
