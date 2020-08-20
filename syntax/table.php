@@ -68,7 +68,7 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
         $this->eventhandler->notifyEvent('close', 'table', NULL, $pos, $match, $handler);
         $handler->addCall('table_end', array(), $pos);
         $handler->getCallWriter()->process();
-        $ReWriter = & $handler->getCallWriter();
+        $ReWriter = $handler->getCallWriter();
         $handler->setCallWriter($ReWriter->getCallWriter());
       break;
 

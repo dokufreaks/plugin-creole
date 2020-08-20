@@ -66,7 +66,7 @@ class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
             case DOKU_LEXER_EXIT:
                 $this->eventhandler->notifyEvent('close', 'list', NULL, $pos, $match, $handler);
                 $handler->addCall('list_close', array(), $pos);
-                $ReWriter = & $handler->getCallWriter();
+                $ReWriter = $handler->getCallWriter();
                 $ReWriter->process();
                 $handler->setCallWriter($ReWriter->getCallWriter());
                 break;
