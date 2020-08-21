@@ -56,7 +56,6 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
         $handler->setCallWriter($ReWriter);
 
         $handler->addCall('table_start', array(), $pos);
-        //$handler->_addCall('table_row', array(), $pos);
         if ( trim($match) == '|=' ) {
           $handler->addCall('tableheader', array(), $pos);
         } else {

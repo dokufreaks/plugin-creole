@@ -70,15 +70,14 @@ class syntax_plugin_creole_emphasis extends DokuWiki_Syntax_Plugin {
         switch ($state) {
             case DOKU_LEXER_ENTER:
                 $this->eventhandler->notifyEvent('open', 'emphasis', NULL, $pos, $match, $handler);
-                $handler->_addCall('emphasis_open', array(), $pos);
+                $handler->addCall('emphasis_open', array(), $pos);
                 break;
             case DOKU_LEXER_UNMATCHED:
-                //$handler->_addCall('unformatted', array($match), $pos);
-                $handler->_addCall('cdata', array($match), $pos);
+                $handler->addCall('cdata', array($match), $pos);
                 break;
             case DOKU_LEXER_EXIT:
                 $this->eventhandler->notifyEvent('close', 'emphasis', NULL, $pos, $match, $handler);
-                $handler->_addCall('emphasis_close', array(), $pos);
+                $handler->addCall('emphasis_close', array(), $pos);
                 break;
         }
         return true;
@@ -90,7 +89,7 @@ class syntax_plugin_creole_emphasis extends DokuWiki_Syntax_Plugin {
 
     public function onHeaderCallback (creole_syntax_event $myEvent, $pos, $match, $handler) {
         $this->eventhandler->notifyEvent('close', 'emphasis', NULL, $pos, $match, $handler);
-        $handler->_addCall('emphasis_close', array(), $pos);
+        $handler->addCall('emphasis_close', array(), $pos);
     }
 }
 // vim:ts=4:sw=4:et:enc=utf-8:
