@@ -39,13 +39,13 @@ class syntax_plugin_creole_preinline extends DokuWiki_Syntax_Plugin {
     function handle($match, $state, $pos, Doku_Handler $handler) {
         switch ($state) {
             case DOKU_LEXER_ENTER:
-                $handler->_addCall('monospace_open', array(), $pos);
+                $handler->addCall('monospace_open', array(), $pos);
                 break;
             case DOKU_LEXER_UNMATCHED:
-                $handler->_addCall('unformatted', array($match), $pos);
+                $handler->addCall('unformatted', array($match), $pos);
                 break;
             case DOKU_LEXER_EXIT:
-                $handler->_addCall('monospace_close', array(), $pos);
+                $handler->addCall('monospace_close', array(), $pos);
                 break;
         }
         return true;

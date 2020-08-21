@@ -62,19 +62,19 @@ class syntax_plugin_creole_monospace extends DokuWiki_Syntax_Plugin {
             case DOKU_LEXER_ENTER:
                 if ( $this->getConf('monospace') == 'DokuWiki' ) {
                     $this->eventhandler->notifyEvent('open', 'monospace', 'dw-monospace', $pos, $match, $handler);
-                    $handler->_addCall('monospace_open', array(), $pos);
+                    $handler->addCall('monospace_open', array(), $pos);
                 } else {
                     $this->eventhandler->notifyEvent('open', 'monospace', 'creole-monospace', $pos, $match, $handler);
                     return array($state);
                 }
                 break;
             case DOKU_LEXER_UNMATCHED:
-                $handler->_addCall('cdata', array($match), $pos);
+                $handler->addCall('cdata', array($match), $pos);
                 break;
             case DOKU_LEXER_EXIT:
                 if ( $this->getConf('monospace') == 'DokuWiki' ) {
                     $this->eventhandler->notifyEvent('close', 'monospace', 'dw-monospace', $pos, $match, $handler);
-                    $handler->_addCall('monospace_close', array(), $pos);
+                    $handler->addCall('monospace_close', array(), $pos);
                 } else {
                     $this->eventhandler->notifyEvent('close', 'monospace', 'creole-monospace', $pos, $match, $handler);
                     return array($state);
@@ -101,7 +101,7 @@ class syntax_plugin_creole_monospace extends DokuWiki_Syntax_Plugin {
         $this->eventhandler->notifyEvent('close', 'monospace', 'dw-monospace', $pos, $match, $handler);
         switch ($myEvent->getTag() == 'dw-monospace') {
             case 'dw-monospace':
-                $handler->_addCall('monospace_close', array(), $pos);
+                $handler->addCall('monospace_close', array(), $pos);
                 break;
             case 'creole-monospace':
                 $this->eventhandler->writeCall('creole_monospace', DOKU_LEXER_EXIT, NULL, NULL, $pos, $match, $handler);

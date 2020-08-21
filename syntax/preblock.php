@@ -39,7 +39,7 @@ class syntax_plugin_creole_preblock extends DokuWiki_Syntax_Plugin {
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
         if ($state == DOKU_LEXER_UNMATCHED) {
-            $handler->_addCall('preformatted', array($match), $pos);
+            $handler->addCall('preformatted', array($match), $pos);
         }
         return true;
     }
