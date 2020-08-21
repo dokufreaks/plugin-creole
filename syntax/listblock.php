@@ -6,6 +6,8 @@
  * @author     Esther Brunner <wikidesign@gmail.com>
  */
 
+use dokuwiki\Parsing\Handler\Lists;
+
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
@@ -57,23 +59,22 @@ class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
         switch ($state) {
             case DOKU_LEXER_ENTER:
                 $this->eventhandler->notifyEvent('open', 'list', NULL, $pos, $match, $handler);
-                $ReWriter = new Doku_Handler_List($handler->CallWriter);
-                $ReWriter = new Doku_Handler_Creole_List($handler->CallWriter);
-                $handler->CallWriter = & $ReWriter;
-                $handler->_addCall('list_open', array($match), $pos);
+                $ReWriter = new Doku_Handler_Creole_List($handler->getCallWriter());
+                $handler->setCallWriter($ReWriter);
+                $handler->addCall('list_open', array($match), $pos);
                 break;
             case DOKU_LEXER_EXIT:
                 $this->eventhandler->notifyEvent('close', 'list', NULL, $pos, $match, $handler);
-                $handler->_addCall('list_close', array(), $pos);
-                $handler->CallWriter->process();
-                $ReWriter = & $handler->CallWriter;
-                $handler->CallWriter = & $ReWriter->CallWriter;
+                $handler->addCall('list_close', array(), $pos);
+                $ReWriter = $handler->getCallWriter();
+                $ReWriter->process();
+                $handler->setCallWriter($ReWriter->getCallWriter());
                 break;
             case DOKU_LEXER_MATCHED:
-                $handler->_addCall('list_item', array($match), $pos);
+                $handler->addCall('list_item', array($match), $pos);
                 break;
             case DOKU_LEXER_UNMATCHED:
-                $handler->_addCall('cdata', array($match), $pos);
+                $handler->addCall('cdata', array($match), $pos);
                 break;
         }
         return true;
@@ -86,7 +87,7 @@ class syntax_plugin_creole_listblock extends DokuWiki_Syntax_Plugin {
 
 /* ----- Creole List Call Writer ----- */
 
-class Doku_Handler_Creole_List extends Doku_Handler_List {
+class Doku_Handler_Creole_List extends Lists {
 
     function interpretSyntax($match, &$type) {
         if (substr($match,-1) == '*') $type = 'u';

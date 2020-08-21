@@ -61,12 +61,12 @@ class syntax_plugin_creole_header extends DokuWiki_Syntax_Plugin {
 
         $this->eventhandler->notifyEvent('insert', 'header', 'header', $pos, $match, $handler);
 
-        if ($handler->status['section']) $handler->_addCall('section_close', array(), $pos);
+        if ($handler->getStatus('section')) $handler->addCall('section_close', array(), $pos);
 
-        $handler->_addCall('header', array($title, $level, $pos), $pos);
+        $handler->addCall('header', array($title, $level, $pos), $pos);
 
-        $handler->_addCall('section_open', array($level), $pos);
-        $handler->status['section'] = true;
+        $handler->addCall('section_open', array($level), $pos);
+        $handler->setStatus('section', true) ;
         return true;
     }
 

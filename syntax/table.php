@@ -6,6 +6,8 @@
  * @author     Esther Brunner <wikidesign@gmail.com>
  */
  
+use dokuwiki\Parsing\Handler\Table;
+
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
 
@@ -50,49 +52,49 @@ class syntax_plugin_creole_table extends DokuWiki_Syntax_Plugin {
     switch ( $state ) {
       case DOKU_LEXER_ENTER:
         $this->eventhandler->notifyEvent('open', 'table', NULL, $pos, $match, $handler);
-        $ReWriter = new Doku_Handler_Table($handler->CallWriter);
-        $handler->CallWriter = & $ReWriter;
+        $ReWriter = new Table($handler->getCallWriter());
+        $handler->setCallWriter($ReWriter);
 
-        $handler->_addCall('table_start', array(), $pos);
+        $handler->addCall('table_start', array(), $pos);
         //$handler->_addCall('table_row', array(), $pos);
         if ( trim($match) == '|=' ) {
-          $handler->_addCall('tableheader', array(), $pos);
+          $handler->addCall('tableheader', array(), $pos);
         } else {
-          $handler->_addCall('tablecell', array(), $pos);
+          $handler->addCall('tablecell', array(), $pos);
         }
       break;
 
       case DOKU_LEXER_EXIT:
         $this->eventhandler->notifyEvent('close', 'table', NULL, $pos, $match, $handler);
-        $handler->_addCall('table_end', array(), $pos);
-        $handler->CallWriter->process();
-        $ReWriter = & $handler->CallWriter;
-        $handler->CallWriter = & $ReWriter->CallWriter;
+        $handler->addCall('table_end', array(), $pos);
+        $handler->getCallWriter()->process();
+        $ReWriter = $handler->getCallWriter();
+        $handler->setCallWriter($ReWriter->getCallWriter());
       break;
 
       case DOKU_LEXER_UNMATCHED:
         if ( trim($match) != '' ) {
-          $handler->_addCall('cdata',array($match), $pos);
+          $handler->addCall('cdata',array($match), $pos);
         }
       break;
 
       case DOKU_LEXER_MATCHED:
         if ( $match == ' ' ){
-          $handler->_addCall('cdata', array($match), $pos);
+          $handler->addCall('cdata', array($match), $pos);
         } else if ( preg_match('/\t+/',$match) ) {
-          $handler->_addCall('table_align', array($match), $pos);
+          $handler->addCall('table_align', array($match), $pos);
         } else if ( preg_match('/ {2,}/',$match) ) {
-          $handler->_addCall('table_align', array($match), $pos);
+          $handler->addCall('table_align', array($match), $pos);
         } else if ( $match == "\n|" ) {
-          $handler->_addCall('table_row', array(), $pos);
-          $handler->_addCall('tablecell', array(), $pos);
+          $handler->addCall('table_row', array(), $pos);
+          $handler->addCall('tablecell', array(), $pos);
         } else if ( $match == "\n|=" ) {
-          $handler->_addCall('table_row', array(), $pos);
-          $handler->_addCall('tableheader', array(), $pos);
+          $handler->addCall('table_row', array(), $pos);
+          $handler->addCall('tableheader', array(), $pos);
         } else if ( $match == '|' ) {
-          $handler->_addCall('tablecell', array(), $pos);
+          $handler->addCall('tablecell', array(), $pos);
         } else if ( $match == '|=' ) {
-          $handler->_addCall('tableheader', array(), $pos);
+          $handler->addCall('tableheader', array(), $pos);
         }
       break;
     }
