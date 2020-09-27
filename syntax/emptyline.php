@@ -7,12 +7,6 @@
  * @author     LarsDW223
  */
 
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
-require_once(DOKU_PLUGIN.'syntax.php');
-
 /**
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
@@ -73,4 +67,3 @@ class syntax_plugin_creole_emptyline extends DokuWiki_Syntax_Plugin {
     }
 }
 // vim:ts=4:sw=4:et:enc=utf-8:
-

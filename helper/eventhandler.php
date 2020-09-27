@@ -7,12 +7,6 @@
  * @author     LarsDW223
  */
 
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
-require_once(DOKU_PLUGIN.'syntax.php');
-
 class creole_syntax_event {
     protected $state = NULL;
     protected $clazz = NULL;
