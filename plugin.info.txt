@@ -1,7 +1,7 @@
 base creole
 author Esther Brunner, Gina Häußge, Michael Klier
 email wikidesign@gmail.com, dokuwiki@chimeric.de
-date 2020-08-21
+date 2020-10-11
 name Creole Plugin
 desc Creole syntax for Dokuwiki
 url http://www.dokuwiki.org/plugin:creole
