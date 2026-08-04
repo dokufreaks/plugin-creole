@@ -9,7 +9,7 @@
 class plugin_creole_test extends DokuWikiTest {
     protected $pluginsEnabled = array('creole');
 
-    function setUp(){
+    function setUp() : void {
         global $conf;
 
         parent::setUp();

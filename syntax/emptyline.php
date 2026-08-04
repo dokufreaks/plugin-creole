@@ -17,12 +17,13 @@ use dokuwiki\Parsing\Handler;
  */
 class syntax_plugin_creole_emptyline extends SyntaxPlugin
 {
-    public $eventhandler;
+    /** @var helper_plugin_creole_eventhandler|null notifies sibling components of matches */
+    public ?helper_plugin_creole_eventhandler $eventhandler = null;
 
     public function getInfo()
     {
         return [
-                'author' => 'Gina HÃ¤uÃge, Michael Klier, Christopher Smith',
+                'author' => 'Gina Häußge, Michael Klier, Christopher Smith',
                 'email'  => 'dokuwiki@chimeric.de',
                 'date'   => '2015-08-30',
                 'name'   => 'Creole Plugin (emptyline component)',

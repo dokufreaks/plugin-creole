@@ -85,9 +85,12 @@ class helper_plugin_creole_eventhandler extends Plugin
      */
     public function notifyEvent($state, $clazz, $tag, $pos, $match, $handler)
     {
-        $state = strtolower($state);
-        $clazz = strtolower($clazz);
-        $tag = strtolower($tag);
+        // NULL means "matches anything" to SyntaxEvent, so it has to survive
+        // normalisation - passing it to strtolower() is deprecated since
+        // PHP 8.1 and would also collapse the wildcard to ''.
+        $state = $state === null ? null : strtolower($state);
+        $clazz = $clazz === null ? null : strtolower($clazz);
+        $tag = $tag === null ? null : strtolower($tag);
 
         $event = new SyntaxEvent($state, $clazz, $tag);
 

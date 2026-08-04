@@ -16,7 +16,8 @@ use dokuwiki\Parsing\Handler;
  */
 class syntax_plugin_creole_header extends SyntaxPlugin
 {
-    public $eventhandler;
+    /** @var helper_plugin_creole_eventhandler|null notifies sibling components of matches */
+    public ?helper_plugin_creole_eventhandler $eventhandler = null;
 
     public function getType()
     {
@@ -38,6 +39,10 @@ class syntax_plugin_creole_header extends SyntaxPlugin
 
     public function preConnect()
     {
+        // The terminating \n is deliberately left out of the match: the
+        // listblock, table and preblock entry patterns all need it to start a
+        // block on the line right below a heading. syntax_plugin_creole_linebreak
+        // skips it instead - see the 'creole_header_eol' status set in handle().
         $this->Lexer->addSpecialPattern(
             '(?m)^[ \t]*=+[^\n]+=*[ \t]*$',
             'base',
@@ -74,6 +79,10 @@ class syntax_plugin_creole_header extends SyntaxPlugin
         $title = trim($title);
 
         $this->eventhandler->notifyEvent('insert', 'header', 'header', $pos, $match, $handler);
+
+        // Remember where this heading's line terminator sits so the linebreak
+        // component can tell it apart from a line break inside inline content.
+        $handler->setStatus('creole_header_eol', $pos + strlen($match));
 
         if ($handler->getStatus('section')) $handler->addCall('section_close', [], $pos);
 

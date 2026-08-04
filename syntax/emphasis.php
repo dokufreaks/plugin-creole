@@ -17,7 +17,8 @@ use dokuwiki\plugin\creole\SyntaxEvent;
  */
 class syntax_plugin_creole_emphasis extends SyntaxPlugin
 {
-    public $eventhandler;
+    /** @var helper_plugin_creole_eventhandler|null notifies sibling components of matches */
+    public ?helper_plugin_creole_eventhandler $eventhandler = null;
 
     public function getInfo()
     {

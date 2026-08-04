@@ -17,7 +17,9 @@ use dokuwiki\Parsing\Handler\Table;
  */
 class syntax_plugin_creole_table extends SyntaxPlugin
 {
-    public $eventhandler;
+    /** @var helper_plugin_creole_eventhandler|null notifies sibling components of matches */
+    public ?helper_plugin_creole_eventhandler $eventhandler = null;
+
     public function getType()
     {
         return 'container';

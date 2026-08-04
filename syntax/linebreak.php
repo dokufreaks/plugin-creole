@@ -38,9 +38,16 @@ class syntax_plugin_creole_linebreak extends SyntaxPlugin
 
     public function handle($match, $state, $pos, Handler $handler)
     {
+        if ($match != "\n") return false;
 
-        if ($match == "\n") return true;
-        return false;
+        // A heading occupies a whole line, so the newline closing it terminates
+        // the heading rather than joining inline content. Emitting a line break
+        // there would put a stray space (or <br />) at the top of the next
+        // paragraph - and for a document that is nothing but a heading it would
+        // wrap the break in an empty paragraph.
+        if ($handler->getStatus('creole_header_eol') === $pos) return false;
+
+        return true;
     }
 
     public function render($mode, Doku_Renderer $renderer, $data)
