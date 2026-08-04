@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Options for the Creole Plugin
  */
+
 // markup precedence when conflicting: 'dokuwiki' (default) or 'creole'
 $conf['precedence'] = 'dokuwiki';
 

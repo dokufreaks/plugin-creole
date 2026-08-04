@@ -1,7 +1,12 @@
 <?php
+
+use dokuwiki\Extension\SyntaxPlugin;
+use dokuwiki\Parsing\Handler;
+use dokuwiki\plugin\creole\SyntaxEvent;
+
 /**
  * Creole Plugin, strong component: Creole style strong text
- * 
+ *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     LarsDW223
  */
@@ -10,52 +15,87 @@
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
  */
-class syntax_plugin_creole_strong extends DokuWiki_Syntax_Plugin {
-    var $eventhandler = NULL;
+class syntax_plugin_creole_strong extends SyntaxPlugin
+{
+    public $eventhandler;
 
-    function getInfo() {
-        return array(
+    public function getInfo()
+    {
+        return [
                 'author' => 'Gina Häußge, Michael Klier, Esther Brunner, LarsDW223',
                 'email'  => 'dokuwiki@chimeric.de',
                 'date'   => '2015-08-29',
                 'name'   => 'Creole Plugin, strong component',
                 'desc'   => 'Creole style strong text',
                 'url'    => 'http://wiki.splitbrain.org/plugin:creole',
-                );
+                ];
     }
 
-    function getType() { return 'protected'; }
-    function getSort() { return 9; }
+    public function getType()
+    {
+        return 'protected';
+    }
+    public function getSort()
+    {
+        return 9;
+    }
 
-    function connectTo($mode) {
+    public function connectTo($mode)
+    {
         $this->Lexer->addSpecialPattern(
-                '\*\*',
-                $mode,
-                'plugin_creole_strong'
-                ); 
+            '\*\*',
+            $mode,
+            'plugin_creole_strong'
+        );
     }
 
     /**
      * Constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->eventhandler = plugin_load('helper', 'creole_eventhandler');
-        $this->eventhandler->addOnNotify('insert', 'header', 'header',
-                                         'open', 'strong', NULL,
-                                         array($this, 'onHeaderCallback'));
-        $this->eventhandler->addOnNotify('found', 'emptyline', NULL,
-                                         'open', 'strong', NULL,
-                                         array($this, 'onHeaderCallback'));
-        $this->eventhandler->addOnNotify('open', 'list', NULL,
-                                         'open', 'strong', NULL,
-                                         array($this, 'onHeaderCallback'));
-        $this->eventhandler->addOnNotify('open', 'table', NULL,
-                                         'open', 'strong', NULL,
-                                         array($this, 'onHeaderCallback'));
+        $this->eventhandler->addOnNotify(
+            'insert',
+            'header',
+            'header',
+            'open',
+            'strong',
+            null,
+            $this->onHeaderCallback(...)
+        );
+        $this->eventhandler->addOnNotify(
+            'found',
+            'emptyline',
+            null,
+            'open',
+            'strong',
+            null,
+            $this->onHeaderCallback(...)
+        );
+        $this->eventhandler->addOnNotify(
+            'open',
+            'list',
+            null,
+            'open',
+            'strong',
+            null,
+            $this->onHeaderCallback(...)
+        );
+        $this->eventhandler->addOnNotify(
+            'open',
+            'table',
+            null,
+            'open',
+            'strong',
+            null,
+            $this->onHeaderCallback(...)
+        );
     }
 
-    function handle($match, $state, $pos, Doku_Handler $handler) {
-        if ( $this->eventhandler->queuedEventExists ('open', 'strong', NULL) == false ) {
+    public function handle($match, $state, $pos, Handler $handler)
+    {
+        if ($this->eventhandler->queuedEventExists('open', 'strong', null) == false) {
             $state = DOKU_LEXER_ENTER;
         } else {
             $state = DOKU_LEXER_EXIT;
@@ -63,27 +103,29 @@ class syntax_plugin_creole_strong extends DokuWiki_Syntax_Plugin {
 
         switch ($state) {
             case DOKU_LEXER_ENTER:
-                $this->eventhandler->notifyEvent('open', 'strong', NULL, $pos, $match, $handler);
-                $handler->addCall('strong_open', array(), $pos);
+                $this->eventhandler->notifyEvent('open', 'strong', null, $pos, $match, $handler);
+                $handler->addCall('strong_open', [], $pos);
                 break;
             case DOKU_LEXER_UNMATCHED:
-                $handler->addCall('cdata', array($match), $pos);
+                $handler->addCall('cdata', [$match], $pos);
                 break;
             case DOKU_LEXER_EXIT:
-                $this->eventhandler->notifyEvent('close', 'strong', NULL, $pos, $match, $handler);
-                $handler->addCall('strong_close', array(), $pos);
+                $this->eventhandler->notifyEvent('close', 'strong', null, $pos, $match, $handler);
+                $handler->addCall('strong_close', [], $pos);
                 break;
         }
         return true;
     }
 
-    function render($mode, Doku_Renderer $renderer, $data) {
+    public function render($mode, Doku_Renderer $renderer, $data)
+    {
         return true;
     }
 
-    public function onHeaderCallback (creole_syntax_event $myEvent, $pos, $match, $handler) {
-        $this->eventhandler->notifyEvent('close', 'strong', NULL, $pos, $match, $handler);
-        $handler->addCall('strong_close', array(), $pos);
+    public function onHeaderCallback(SyntaxEvent $myEvent, $pos, $match, $handler)
+    {
+        $this->eventhandler->notifyEvent('close', 'strong', null, $pos, $match, $handler);
+        $handler->addCall('strong_close', [], $pos);
     }
 }
 // vim:ts=4:sw=4:et:enc=utf-8:
