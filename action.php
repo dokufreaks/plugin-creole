@@ -38,7 +38,7 @@ class action_plugin_creole extends ActionPlugin
         if ($this->getConf('precedence') != 'creole') return false; // leave untouched
 
         $c = count($event->data);
-        for ($i = 0; $i <= $c; $i++) {
+        for ($i = 0; $i < $c; $i++) {
             if ($event->data[$i]['type'] == 'format') {
                 // headers
                 if (preg_match("/h(\d)\.png/", $event->data[$i]['icon'], $match)) {
